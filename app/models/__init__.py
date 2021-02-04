@@ -12,17 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.views import View
-from django.http import JsonResponse
-from app.task import sum_task
+from .task import Task                                            # noqa: F401
 
-
-class Health(View):
-    """Health Page Controller"""
-
-    def get(self, request):
-        sum_task.delay(1, 2)
-
-        return JsonResponse({
-            "status": "ok"
-        })

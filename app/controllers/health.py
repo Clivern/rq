@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.urls import path
+from django.views import View
+from django.http import JsonResponse
+from app.tasks.sum import sum_task
 
-from app.controllers.health import Health
 
+class Health(View):
+    """Health Page Controller"""
 
-urlpatterns = [
-    path('_health', Health.as_view(), name='app.web.health'),
-]
+    def get(self, request):
+        sum_task.delay(1, 2)
+
+        return JsonResponse({
+            "status": "ok"
+        })
