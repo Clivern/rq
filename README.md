@@ -23,5 +23,5 @@ $ make worker
 # RQ Statistics
 $ make rqstats
 
-$ curl http://127.0.0.1:8000/_health
+$ curl http://127.0.0.1:8000/
 ```

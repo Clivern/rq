@@ -30,16 +30,14 @@ else:
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'u1pna4n-pdsd3n_fgm$euos5zbs8-uaf=d%b13qnlp4r8pxd@g'
+SECRET_KEY = os.getenv("APP_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv("APP_DEBUG_MODE", "false").lower() == "true")
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [] if (os.getenv("ALLOWED_HOSTS", "") == "") else os.getenv("ALLOWED_HOSTS", "").split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -84,12 +82,30 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+db_connection = os.getenv("DB_CONNECTION")
+db_name = os.getenv("DB_DATABASE")
+db_username = os.getenv("DB_USERNAME")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+
+if db_connection == "mysql":
+    default_db = {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': db_name,
+        'USER': db_username,
+        'PASSWORD': db_password,
+        'HOST': db_host,
+        'PORT': db_port,
+    }
+else:
+    default_db = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(APP_ROOT + "/storage/database/", 'db.sqlite3')
+    }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': default_db
 }
 
 
@@ -115,9 +131,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = os.getenv("APP_LANGUAGE", "en-us")
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.getenv("APP_TIMEZONE", "UTC")
 
 USE_I18N = True
 
@@ -132,6 +148,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # RQ Queue Configs
+# https://github.com/rq/django-rq
 RQ_QUEUES = {
     'default': {
         'HOST': os.getenv("REDIS_HOST"),

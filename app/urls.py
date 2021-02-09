@@ -1,4 +1,4 @@
-# Copyright 2020 Clivern
+# Copyright 2021 Clivern
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,5 +18,5 @@ from app.controllers.health import Health
 
 
 urlpatterns = [
-    path('_health', Health.as_view(), name='app.web.health'),
+    path('', Health.as_view(), name='app.web.health'),
 ]
