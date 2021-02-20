@@ -12,10 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import os.path
-from . import receivers               # noqa: F401
-
-
-APP_DIR = os.path.dirname(os.path.abspath(__file__))
-APP_ROOT = os.path.dirname(APP_DIR)
+from .http_call_callbacks import http_call_callback1                                            # noqa: F401
+from .http_call_callbacks import http_call_callback2                                            # noqa: F401

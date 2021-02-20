@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import os.path
-from . import receivers               # noqa: F401
+import django.dispatch
 
 
-APP_DIR = os.path.dirname(os.path.abspath(__file__))
-APP_ROOT = os.path.dirname(APP_DIR)
+# http call signal
+http_call = django.dispatch.Signal(providing_args=["message"])

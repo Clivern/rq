@@ -15,13 +15,18 @@
 from django.views import View
 from django.http import JsonResponse
 from app.tasks.sum import sum_task
+from app.signals import http_call
 
 
 class Health(View):
     """Health Page Controller"""
 
     def get(self, request):
+        # Delegate the task to RQ workers
         sum_task.delay(1, 2)
+
+        # Trigger a django signal
+        http_call.send(sender=self.__class__, message="Hello World")
 
         return JsonResponse({
             "status": "ok"
